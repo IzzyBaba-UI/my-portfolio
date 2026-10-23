@@ -1,0 +1,42 @@
+/* Closing band — the page signs off with a wide sheet of iridescent ribbons sitting flush
+   against the very bottom edge, directly under .site-footer's #070707 plate so the black
+   never breaks. It ships as one 2880x960 PNG (public/bottom-image.png) because the ribbons
+   carry a film grain and a soft halo that would cost far more to fake with CSS gradients.
+   The artwork is used exactly as exported: no colour bloom, no sweeping highlight, no drift.
+   Its own near-black headroom already carries the eye out of the plate, so the only trick
+   left is a short alpha fade at the very top that marries the two blacks.
+   The export is 3:1, so it arrives with a tall black sweep above the crests: the band's own
+   aspect is wider than that, and the top bias below spends the crop on that dead space
+   instead of on the ribbons. The artwork stays lazy + low priority so its weight never
+   competes with the first paint. */
+
+.base-band {
+  /* The artwork fades in from the top, so it has no hard edge against the plate; widen the
+     stop for a longer blend. */
+  --band-fade: linear-gradient(180deg, transparent 0, #000 16%);
+  position: relative;
+  height: clamp(140px, 16vw, 250px);
+  overflow: hidden;
+  background: #070707;
+}
+
+.base-band-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Biased low so the crop keeps the body of the ribbons and trims the empty black
+     above them; the waves run off the bottom edge like a horizon. */
+  object-position: 50% 76%;
+}
+
+/* The fade goes on the artwork, never on the plate: masking .base-band itself would punch
+   holes in its #070707 background and let .page's lighter radial gradient show through as a
+   grey haze above the artwork. Masking the image keeps the seam at exactly #070707. */
+.base-band-art { mask-image: var(--band-fade); -webkit-mask-image: var(--band-fade); }
+
+/* Phones crop harder, so the band drops in height to keep the waves readable. */
+@media (max-width: 800px) {
+  .base-band { height: clamp(112px, 30vw, 176px); }
+}

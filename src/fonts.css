@@ -1,0 +1,72 @@
+/* Typography — one family, nine real cuts, nothing synthesised.
+   ---------------------------------------------------------------------------
+   Spartan is the site's only typeface. It replaces the previous trio of DM Sans
+   + DM Mono + Playfair Display, which arrived as one remote Google Fonts
+   @import: that request is gone, so the page now makes no third-party font
+   call and no headline has to change family halfway through a line.
+
+   The cuts live in /public/fonts (unpacked from public/fonts/spartan.zip) and
+   every @font-face below names the weight it really is, which buys two things:
+   the browser only downloads the cuts some rule actually asks for, and nothing
+   is ever faked — a request for 800 finds ExtraBold itself instead of a
+   smeared interpolation of SemiBold.
+
+   The whole hierarchy is the scale underneath: one family, and weight, case and
+   tracking carry the rest. Change a tier here and every rule that leans on it
+   follows, so heading levels cannot drift apart the way they had.
+
+     display  600  hero h1, section h2, the closing headline      tracking -.03em
+     subhead  500  h3s / card titles, buttons, tabs, big ledes    tracking -.012em
+     body     400  paragraphs, small print                        tracking 0 (default)
+     label    500  uppercase eyebrows + meta, opened up           tracking .1em
+     accent   300  `em` inside a headline: the lighter cut        tracking -.03em
+
+   The family ships no italic — only the nine uprights — so nothing on the page
+   is slanted, `em` included. It signals emphasis with the lighter weight, which
+   is also why :root keeps `font-synthesis: none`: no faux bold, no faux italic,
+   ever. */
+
+@font-face { font-family: 'Spartan'; font-style: normal; font-weight: 100; font-display: swap; src: url('/fonts/Spartan-Thin.ttf') format('truetype'); }
+@font-face { font-family: 'Spartan'; font-style: normal; font-weight: 200; font-display: swap; src: url('/fonts/Spartan-ExtraLight.ttf') format('truetype'); }
+@font-face { font-family: 'Spartan'; font-style: normal; font-weight: 300; font-display: swap; src: url('/fonts/Spartan-Light.ttf') format('truetype'); }
+@font-face { font-family: 'Spartan'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/Spartan-Regular.ttf') format('truetype'); }
+@font-face { font-family: 'Spartan'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/Spartan-Medium.ttf') format('truetype'); }
+@font-face { font-family: 'Spartan'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/Spartan-SemiBold.ttf') format('truetype'); }
+@font-face { font-family: 'Spartan'; font-style: normal; font-weight: 700; font-display: swap; src: url('/fonts/Spartan-Bold.ttf') format('truetype'); }
+@font-face { font-family: 'Spartan'; font-style: normal; font-weight: 800; font-display: swap; src: url('/fonts/Spartan-ExtraBold.ttf') format('truetype'); }
+@font-face { font-family: 'Spartan'; font-style: normal; font-weight: 900; font-display: swap; src: url('/fonts/Spartan-Black.ttf') format('truetype'); }
+
+:root {
+  /* Spartan first, then a system stack that shares its geometric, high-x-height
+     proportions so a fallback paint (or a blocked font file) still lands close. */
+  --font-sans: 'Spartan', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  /* Weight scale — each value is a real file in /public/fonts. */
+  --fw-display: 600;
+  --fw-subhead: 500;
+  --fw-body: 400;
+  --fw-label: 500;
+  --fw-accent: 300;
+  /* Heaviest cut the page uses: the faux-mail tile in the nav and the <b> run inside the
+     drawn phone mock-ups, which browsers bold by default. */
+  --fw-bold: 700;
+
+  /* Tracking scale, by optical size: display type tightens, text stays neutral,
+     uppercase micro-labels open up so they read as labels rather than shouting. */
+  --track-display: -.03em;
+  --track-subhead: -.012em;
+  --track-ui: .01em;
+  --track-label: .1em;
+
+  /* Spartan's ink runs 1.125em tall (0.875 ascent + 0.25 descent), so any line-height
+     below that collides as soon as a headline wraps: 1.18 leaves a uniform ~0.06em gap.
+     The few headings still sitting at .85-.95 are the single-line ones, where nothing can
+     stack against them and the value only pads their box. */
+  --lh-display: 1.18;
+
+  font-family: var(--font-sans);
+  font-synthesis: none;
+}
+
+/* <b>/<strong> land on Spartan's real Bold cut instead of a synthesised one. */
+b, strong { font-weight: var(--fw-bold); }

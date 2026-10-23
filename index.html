@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Omole Israel — product and graphic designer turning ideas into products, brands and experiences people connect with." />
+    <meta name="theme-color" content="#070707" />
+    <link rel="stylesheet" href="/index.css" />
+
+    <!-- Type is self-hosted (src/fonts.css), so the two cuts the first screen paints with
+         are worth fetching up front: the hero headline is SemiBold and its lede plus the
+         nav are Regular. The other seven weights stay on disk until a rule asks for one.
+         crossorigin is required because fonts are always fetched in CORS mode. -->
+    <link rel="preload" href="/fonts/Spartan-SemiBold.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="preload" href="/fonts/Spartan-Regular.ttf" as="font" type="font/ttf" crossorigin />
+
+    <!-- Static files live in /public — favicons, touch icon and manifest. -->
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Link previews. og:image must be an absolute URL, so swap the placeholder domain for
+         the live one once this is deployed or the preview image will not resolve. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Omole Israel — Product Designer" />
+    <meta property="og:description" content="Product and graphic designer turning ideas into products, brands and experiences people connect with." />
+    <meta property="og:image" content="https://your-domain.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Omole Israel, product designer, above a band of iridescent ribbons." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Omole Israel — Product Designer" />
+    <meta name="twitter:description" content="Product and graphic designer turning ideas into products, brands and experiences people connect with." />
+    <meta name="twitter:image" content="https://your-domain.com/og-image.jpg" />
+    <title>Omole Israel — Product Designer</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

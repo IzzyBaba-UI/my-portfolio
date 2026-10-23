@@ -1,0 +1,30 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #222;
+  background: #f7f8fb;
+}
+header {
+  background: #0d6efd;
+  color: #fff;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+main {
+  max-width: 900px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+}
+.project {
+  border: 1px solid #e3e6ea;
+  background: #fff;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+}
+footer {
+  text-align: center;
+  padding: 1rem;
+  color: #666;
+}

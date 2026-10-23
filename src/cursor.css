@@ -1,0 +1,79 @@
+/* Pointer — the OS cursor is swapped for a small white dot that inverts whatever it passes
+   over, swells into a ring over anything interactive, and opens into a labelled "View
+   Project" disc over a card that leads somewhere.
+   ---------------------------------------------------------------------------------------
+   Ported from jingjinghan.com, which drives the same dot with GSAP's quickTo (0.32s, power3).
+   The follow itself has been tightened to a ~28ms exponential ease (see CustomCursor in
+   App.jsx) so the dot no longer trails noticeably behind the hand. Four things are
+   load-bearing:
+
+     - mix-blend-mode: difference is the whole character of it. White over the page's black
+       reads white; over a bright poster or a white phone mock-up it flips to black instead
+       of disappearing. The label is black for the same reason — inside the blended group it
+       cuts a hole through the disc and takes the colour of whatever sits behind it.
+
+     - width/height are animated rather than a transform: scale(), so the glyphs keep their
+       own size while the ring grows around them. translate(-50%, -50%) then keeps every
+       state centred on the pointer itself.
+
+     - z-index: 150 clears the project dialog (20), the "Things I've Made" controls (5) and
+       the nav (3), so nothing the page paints can land on top of the pointer.
+
+     - display: none until .has-custom-cursor is on <html>. That class is the only thing that
+       hides the native cursor, and App's effect only adds it for a fine pointer with motion
+       allowed — so touch screens and reduced-motion readers keep the OS cursor and never see
+       the dot at all. Everything below that hides a cursor lives in the min-width block, so
+       below it (where the layout is the phone one) nothing is hidden and nothing runs. */
+
+.custom-cursor-dot {
+  position: fixed;
+  z-index: 150;
+  top: 0;
+  left: 0;
+  display: none;
+  width: 16px;
+  height: 16px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #fff;
+  mix-blend-mode: difference;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform;
+  /* Short enough that the swell lands with the pointer rather than behind it — a 400ms grow
+     reads as lag however responsive the follow itself is. */
+  transition: width .26s cubic-bezier(.22, 1, .36, 1), height .26s cubic-bezier(.22, 1, .36, 1), opacity .2s;
+}
+
+/* Held back until the first pointermove lands, so the dot never flashes in the top-left
+   corner while the pointer is still only implied by the window. */
+.custom-cursor-dot.is-live { opacity: 1; }
+.custom-cursor-dot.is-hover { width: 44px; height: 44px; }
+.custom-cursor-dot.is-view { width: 150px; height: 150px; }
+
+.cursor-label {
+  color: #000;
+  opacity: 0;
+  font: var(--fw-subhead) 1rem var(--font-sans);
+  letter-spacing: var(--track-ui);
+  line-height: 1.15;
+  text-align: center;
+  white-space: nowrap;
+  transform: scale(.5);
+  transition: opacity .3s, transform .35s cubic-bezier(.22, 1, .36, 1);
+}
+
+.custom-cursor-dot.is-view .cursor-label { opacity: 1; transform: scale(1); }
+
+@media (min-width: 801px) {
+  /* The list is written out rather than relying on inheritance from <html>: an element with
+     its own `cursor` declaration (the tools row's resize cursor, the buttons and tabs across
+     the page) beats an inherited value whatever the specificity, so each has to be named. */
+  :root.has-custom-cursor,
+  :root.has-custom-cursor a,
+  :root.has-custom-cursor button,
+  :root.has-custom-cursor [data-cursor-hover] { cursor: none; }
+
+  .has-custom-cursor .custom-cursor-dot { display: flex; }
+}

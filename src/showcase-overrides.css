@@ -1,0 +1,149 @@
+/* Wider featured-work presentation, with controls kept visually secondary.
+
+   The frame is sized around the artwork instead of around the column: the
+   OneTake render tops out ~560px wide and the drawn phone mock-up ~620px, so a
+   1095px plate left either of them floating in a sea of colour. 840px is the
+   widest frame those two fill without padding them with empty stage.
+
+   The phones and the render also share one vw basis with the frame (40 against
+   46), which keeps the same ~13% headroom above the tallest artwork at every
+   width. That is what stops a phone from growing through the frame's top edge -
+   the stage is `overflow: visible` so the controls can sit outside it. */
+.made-stage {
+  width: min(80%, 840px);
+  height: min(46vw, 600px);
+  min-height: 460px;
+}
+
+.phone-main {
+  width: clamp(170px, 19vw, 260px);
+  height: min(40vw, 520px);
+}
+
+.phone-left,
+.phone-right {
+  width: clamp(128px, 15vw, 200px);
+  height: min(31vw, 405px);
+}
+
+/* The OneTake render stands in for the drawn mock-up, so it tracks .phone-main's height and
+   baseline at every width: the phones keep the same scale across the carousel. */
+.stage-art img { height: min(40vw, 520px); }
+
+/* The Obana slide's card is the light plate its render was exported on (#f4fcff) rather than one of
+   the wine/blue/green washes, which is what the artwork was composed against. Two of the shared
+   stage rules have to move with it:
+
+   1. .made-stage:before is a near-black radial vignette at the bottom centre — the weight that
+      grounds the phones on a dark wash. Behind a white landing page it paints a grey blob through
+      the render's transparent areas, so on this card it thins to a hint of the Obana navy that
+      separates the white panels from the plate without smudging them.
+   2. The caption scrim (transparent -> .88 black) only reaches ~40% black behind the title on a
+      light plate, leaving white on mid grey (~2.7:1). The title has to stay white — the bottom
+      left of the render is a dark navy panel — so the ramp deepens and reaches full strength
+      earlier here instead (~5.7:1 behind the title) while the top of the caption box stays clear. */
+.made-stage.sky { background: #f4fcff; }
+.made-stage.sky:before { background: radial-gradient(ellipse at 50% 118%, rgb(9 40 58 / .22), transparent 60%); }
+.made-stage.sky .made-caption { background: linear-gradient(transparent, rgb(3 28 42 / .95) 78%); }
+
+/* The case-study panel keys off the same colour token, and its "Selected project" label inherits the
+   light body colour, so on the light plate it needs the plate's own ink instead. */
+
+/* Chevron controls. The glyphs are the shipped nexxt.svg / right-next.svg marks rather than
+   text arrows, so the button is a frosted disc instead of a boxed glyph: same glass recipe as
+   the nav, the cards and the "View All" pill, scaled down to a control. Because the mark
+   is a fixed white fill, hover brightens the glass instead of flooding the disc white - a
+   #fff fill would swallow the chevron caught in it. */
+.stage-arrow {
+  width: 44px;
+  height: 44px;
+  border-color: rgb(255 255 255 / .22);
+  background: rgb(255 255 255 / .1);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .18), 0 10px 30px rgb(0 0 0 / .28);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  transition: background .22s, border-color .22s, transform .22s;
+}
+
+/* Width stays auto so the 11:19 viewBox ratio is preserved at any size. */
+.stage-arrow img { display: block; width: auto; height: 19px; }
+
+.stage-arrow:hover {
+  border-color: rgb(255 255 255 / .5);
+  background: rgb(255 255 255 / .24);
+  transform: scale(1.06);
+}
+
+.previous { left: -76px; }
+.next { right: -76px; }
+
+
+@media (max-width: 760px) {
+  .made-stage {
+    width: calc(100% - 28px);
+    height: 430px;
+    min-height: 430px;
+  }
+
+  .phone-main { width: 165px; height: 350px; }
+  .stage-art img { height: 350px; }
+  .phone-left,
+  .phone-right { width: 110px; height: 270px; }
+
+  /* At 390px the three phones total 345px against a 334px frame, and the 1.5deg tilt widens
+     each rotated box further, so the side phones' corners used to spill ~9px past the frame
+     edge onto the page. Deepening the inter-phone overlap moves the group in without shrinking
+     the artwork. */
+  .phone-left { margin-right: -34px; }
+  .phone-right { margin-left: -34px; }
+
+  .stage-arrow { width: 38px; height: 38px; }
+  .stage-arrow img { height: 16px; }
+  .previous { left: -18px; }
+  .next { right: -18px; }
+}
+
+/* Reduced motion drops the grow, not the state change: hover still reads as hover. */
+@media (prefers-reduced-motion: reduce) {
+  .stage-arrow { transition: background .22s, border-color .22s; }
+  .stage-arrow:hover { transform: none; }
+}
+
+
+/* Stage art that rises from the bottom edge (Acktors phones, Biosimulant cards): the art box is
+   clipped to the rounded frame, the group is bottom-aligned, and each piece is pushed a little
+   past the bottom so it reads as coming up out of the frame. The centre piece is tallest, the
+   two behind it are shorter and spread out either side, and the top of the frame stays open. */
+.stage-phones, .stage-shots { overflow: hidden; border-radius: inherit; align-items: flex-end; }
+.stage-phones img { width: auto; max-width: none; object-fit: contain; }
+.stage-phones .is-main { z-index: 2; height: 94%; transform: translateY(9%); }
+.stage-phones .is-side { z-index: 1; height: 74%; transform: translateY(13%); }
+.stage-phones .is-side:first-child { margin-right: .4rem; }
+.stage-phones .is-side:last-child { margin-left: .4rem; }
+
+.stage-shots { gap: 0; }
+.stage-shots .is-side:first-child { margin-right: -3%; }
+.stage-shots .is-side:last-child { margin-left: -3%; }
+.shot { overflow: hidden; border: 2px solid #153a31; border-radius: 16px; background: #fff; box-shadow: 0 14px 40px rgb(8 40 32 / .2); }
+.shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.shot.is-main { z-index: 2; width: 38%; height: 92%; margin-bottom: -4%; }
+.shot.is-side { z-index: 1; width: 28%; height: 74%; margin-bottom: -4%; }
+
+.made-stage.mint { background: #f1faf6; }
+.made-stage.mint:before { background: radial-gradient(ellipse at 50% 118%, rgb(8 40 32 / .2), transparent 60%); }
+.made-stage.mint .made-caption { background: linear-gradient(transparent, rgb(4 30 24 / .95) 78%); }
+.case-cover.mint, .case-frame .mint { background: #f1faf6; }
+@media (max-width: 760px) {
+  .stage-phones .is-side:first-child { margin-right: 0; }
+  .stage-phones .is-side:last-child { margin-left: 0; }
+  .shot { border-radius: 12px; }
+}
+
+/* Acktors brand (Spotlight palette from the brand guidelines): near-black #0e0e10 plate with a soft
+   Spotlight Yellow #ffd52e glow rising behind the phones, so the frame carries the brand's own
+   colour instead of the generic wine wash. */
+.made-stage.acktors { background: radial-gradient(60% 70% at 50% 100%, rgb(255 213 46 / .28), transparent 70%), linear-gradient(180deg, #1a1a1c, #0e0e10); border-color: rgb(255 213 46 / .22); }
+.made-stage.acktors:before { background: radial-gradient(ellipse at 50% 118%, rgb(0 0 0 / .5), transparent 60%); }
+.made-stage.acktors .made-caption { background: linear-gradient(transparent, rgb(14 14 16 / .96) 78%); }
+.made-stage.acktors .made-caption h3 { color: #ffd52e; }
+.case-cover.acktors { background: #0e0e10; }

@@ -1,0 +1,5 @@
+# Portfolio site — everything is public, so crawlers are welcome everywhere.
+# The social preview lives at /og-image.jpg and the tab icons at /favicon.svg,
+# /favicon.ico and /apple-touch-icon.png.
+User-agent: *
+Allow: /

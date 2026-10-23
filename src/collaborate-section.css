@@ -1,0 +1,70 @@
+/* Let's Collaborate — the closing call to action: a centred headline over a row of
+   circular contact icons, with the site footer underneath. Like .experiments above it,
+   the section paints its own near-black plate so the page still reads as one continuous
+   black sheet instead of the lighter .page radial gradient.
+   Each icon owns an accent colour (.phone/.mail/.instagram/.whatsapp/.x) that floods up
+   from inside the circle on hover while the glyph bobs in place. All colour comes from
+   CSS plus inline SVG, since this project ships no image assets. */
+
+.collaborate { position: relative; isolation: isolate; padding: 8rem 0 8.5rem; background: #070707; }
+/* Full-bleed plate behind the section, matching .experiments, so the black never breaks
+   at the horizontal edges. */
+.collaborate:before { position: absolute; z-index: -1; inset: 0 -100vmax; background: #070707; content: ''; }
+
+.collaborate-head { display: grid; gap: clamp(2.6rem, 5vw, 4rem); justify-items: center; text-align: center; }
+.collaborate-title { margin: 0; font-weight: var(--fw-display); line-height: var(--lh-display); letter-spacing: var(--track-display); }
+/* The lighter cut for "Let's" (upright by design) above the SemiBold headline: both lines
+   stay in Spartan, so the emphasis reads as a weight change rather than a family change. */
+.collaborate-title em { display: block; color: #f6f4f1; font-size: clamp(2.4rem, 6.2vw, 5.2rem); font-style: normal; font-weight: var(--fw-accent); letter-spacing: var(--track-display); }
+.collaborate-title span { display: block; margin-top: -.06em; font-size: clamp(3.3rem, 9.6vw, 7.8rem); font-weight: var(--fw-display); letter-spacing: var(--track-display); }
+
+.collaborate-actions { display: flex; flex-wrap: wrap; gap: .9rem; justify-content: center; }
+
+/* --accent drives the ring, the glow and the glyph colour; --flood lets Instagram keep
+   its multi-stop gradient while every other icon falls back to the solid accent. */
+.collaborate-icon { --accent: #ff8200; position: relative; display: grid; width: 64px; height: 64px; place-items: center; overflow: hidden; border: 1px solid rgb(255 255 255 / .3); border-radius: 50%; color: #f4f0ec; transition: transform .4s cubic-bezier(.2, .88, .26, 1.14), border-color .35s, color .35s, box-shadow .4s; }
+.collaborate-icon:before { position: absolute; inset: 0; border-radius: inherit; background: var(--flood, var(--accent)); box-shadow: inset 0 1px 1px rgb(255 255 255 / .42); content: ''; transform: translateY(104%); transition: transform .5s cubic-bezier(.16, .84, .26, 1.06); }
+.collaborate-icon:hover, .collaborate-icon:focus-visible { border-color: var(--accent); color: #0a0b0c; box-shadow: 0 16px 32px -14px var(--accent); transform: translateY(-9px); }
+.collaborate-icon:hover:before, .collaborate-icon:focus-visible:before { transform: translateY(0); }
+.collaborate-glyph { position: relative; width: 23px; height: 23px; }
+.collaborate-icon:hover .collaborate-glyph, .collaborate-icon:focus-visible .collaborate-glyph { animation: collaborate-float .9s ease-in-out infinite; }
+.collaborate-icon.phone { --accent: #ff8200; }
+.collaborate-icon.mail { --accent: #5b8cff; }
+.collaborate-icon.instagram { --accent: #e1306c; --flood: linear-gradient(148deg, #f9ce34 0%, #ee2a7b 46%, #6228d7 100%); }
+.collaborate-icon.whatsapp { --accent: #25d366; }
+.collaborate-icon.x { --accent: #f4f0ec; }
+
+/* Bobbing glyph: the arrow/bubble rises and settles inside the flooded circle. */
+@keyframes collaborate-float { 0%, 100% { transform: translateY(-2.5px) scale(1.06); } 50% { transform: translateY(2.5px) scale(1.06); } }
+
+/* Full-bleed closing band on the same black plate, so the page ends without a seam. */
+.site-footer { position: relative; display: block; width: 100%; margin: 0; padding: 2.5rem 24px 2.9rem; border-top: 0; background: #070707; color: #cbc8ce; font: var(--fw-subhead) .78rem var(--font-sans); letter-spacing: var(--track-ui); text-align: center; text-transform: none; }
+
+@media (max-width: 800px) {
+  .collaborate { padding: 6rem 0 6.5rem; }
+  .collaborate-actions { gap: .6rem; }
+  .collaborate-icon { width: 54px; height: 54px; }
+  .collaborate-glyph { width: 20px; height: 20px; }
+}
+
+/* Narrowest supported width (320px): keep all five icons on one centred row instead of
+   letting the last one wrap on its own. */
+@media (max-width: 340px) {
+  .collaborate-actions { gap: .5rem; }
+  .collaborate-icon { width: 46px; height: 46px; }
+  .collaborate-glyph { width: 18px; height: 18px; }
+}
+
+/* Keep the colour feedback, drop the movement. */
+@media (prefers-reduced-motion: reduce) {
+  .collaborate-icon { transition: border-color .2s, color .2s; }
+  .collaborate-icon:before { opacity: 0; transform: translateY(0); transition: opacity .2s; }
+  .collaborate-icon:hover, .collaborate-icon:focus-visible { transform: none; }
+  .collaborate-icon:hover:before, .collaborate-icon:focus-visible:before { opacity: 1; }
+  .collaborate-icon:hover .collaborate-glyph, .collaborate-icon:focus-visible .collaborate-glyph { animation: none; }
+}
+
+.site-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .6rem 1rem; }
+.footer-dot { width: 4px; height: 4px; border-radius: 50%; background: #ff8200; }
+.site-footer .footer-top { color: #cbc8ce; transition: color .2s, transform .2s; }
+.site-footer .footer-top:hover { color: #ff8200; transform: translateY(-2px); }

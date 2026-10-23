@@ -1,0 +1,25 @@
+# dependencies and build output
+node_modules/
+dist/
+
+# secrets and local config (the .env holds an API key: never commit it)
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+
+# editor / tool state
+.vscode/
+.claude/
+
+# large local-only files
+public/slideshows/
+
+# Behance presentation exports (kept on this machine, not part of the site)
+drift-behance/
+harvest-signal-behance/
+lumen-trails-behance/
+readublock-behance/
+skillspark-behance/

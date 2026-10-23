@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Omole Israel">
+  <title>Omole Israel</title>
+  <!-- Drawn from geometry only: no text, so the tab icon renders identically everywhere
+       even though the site's own fonts are fetched from Google Fonts. The ring is the "O"
+       of the OI monogram in the nav, the dot is the orange .identity-dot next to it. -->
+  <rect width="64" height="64" rx="14" fill="#070707"/>
+  <circle cx="26" cy="32" r="12" fill="none" stroke="#f6f4f1" stroke-width="7"/>
+  <circle cx="48" cy="32" r="5.5" fill="#ff8200"/>
+</svg>
