@@ -449,7 +449,7 @@ function App() {
               ("BrandDesigner"), and the h1's accessible name lost the gap too. `{' '}` between the two
               runs is a real space character, so the headline reads as two words however it is styled. */}
           <h1 className={`role-title ${roleLeaving ? 'is-leaving' : ''}`} aria-live="polite"><span className="role-prefix">{roles[roleIndex].split(' ')[0]}</span>{' '}<span className="typewriter" key={roles[roleIndex]}>{roles[roleIndex].substring(roles[roleIndex].indexOf(' ') + 1)}</span></h1>
-          <div className="hero-bottom"><p>Nigerian based product designer who loves beautiful things and blends creativity, technology, and a little vibe-coding into every build.</p><a className="circle-link" href="#work" aria-label="Scroll to selected work">↓</a></div>
+          <div className="hero-bottom"><p>Product designer who loves beautiful things and blends creativity, technology, and a little vibe-coding into every build.</p><a className="circle-link" href="#work" aria-label="Scroll to selected work">↓</a></div>
           <div className="scroll-indicator" aria-hidden="true"><p className="scroll-cue">Scroll</p><span className="scroll-line"><i /></span></div>
         </section>
 
