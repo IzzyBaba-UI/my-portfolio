@@ -164,7 +164,7 @@ function IntroScreen({ onDone }) {
     <>
     <div className="intro-bg" aria-hidden="true" />
     <div className="intro-screen" aria-hidden="true">
-      <div className="intro-name"><span>Omole</span> <span>Israel</span></div>
+      <div className="intro-name"><span className="w"><i>Omole</i></span> <span className="w"><i>Israel</i></span></div>
       <div className="intro-line"><i style={{ transform: `scaleX(${count / 100})` }} /></div>
       <div className="intro-meta"><span>Portfolio · 2026</span><span className="intro-count">{String(count).padStart(3, '0')}</span><span>Product &amp; Graphic Designer</span></div>
     </div>
