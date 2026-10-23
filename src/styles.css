@@ -80,3 +80,15 @@ a:focus-visible, button:focus-visible { outline: 2px solid #ff8200; outline-offs
   100% { clip-path: inset(0% 0% 0% 0% round 0px); }
 }
 @media (prefers-reduced-motion: reduce) { .intro-screen, .intro-bg { display: none; } .page.is-intro { position: relative; height: auto; overflow: visible; animation: none; } }
+
+/* Phone layout for the hero headline. The two role words used to sit on one nowrap line sized at 17vw, which
+   ran off both edges of a phone ("Visual Storyteller" was wider than the screen) and made the typing and
+   fade animations slide around under the intro text. On a phone the words now stack on two centred lines,
+   the h1 reserves both lines so it never changes height between roles, and the intro text keeps a fixed gap. */
+@media (max-width: 680px) {
+  .hero { gap: 2.25rem; }
+  .hero h1 { display: flex; flex-direction: column; align-items: center; justify-content: center; max-width: 100%; min-height: 2.1em; margin: auto 0; font-size: clamp(2.7rem, 14.5vw, 4.3rem); line-height: 1.02; white-space: normal; }
+  .hero h1 .role-prefix { display: block; }
+  .hero h1 .typewriter { display: block; width: max-content; max-width: 100%; border-right-width: 2px; }
+  .hero-bottom p { max-width: 300px; font-size: .95rem; line-height: 1.5; }
+}
