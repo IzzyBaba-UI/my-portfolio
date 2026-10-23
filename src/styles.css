@@ -56,3 +56,25 @@ a:focus-visible, button:focus-visible { outline: 2px solid #ff8200; outline-offs
 .made-tabs button:hover { transform: translateY(-2px); }
 .made-stage { transition: transform .45s cubic-bezier(.2, .7, .2, 1), box-shadow .45s; }
 .made-stage:hover, .reveal-on .made-stage.reveal.is-in:hover { transform: translateY(-6px); box-shadow: 0 30px 80px -30px rgb(0 0 0 / .8); }
+
+/* Opening sequence. The cream screen sits above the page; the page itself is clipped to a small rounded
+   window in the middle of the viewport and grows to full screen once the name has come into focus.
+   Everything is keyed to INTRO_MS (3.6s) in App.jsx. */
+.intro-bg { position: fixed; z-index: 0; inset: 0; background: #f3efe6; }
+.intro-screen { position: fixed; z-index: 200; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #12110d; pointer-events: none; }
+.intro-name { font-size: clamp(3rem, 11vw, 9.5rem); font-weight: 600; line-height: .95; letter-spacing: -.05em; text-align: center; animation: intro-name 1.7s cubic-bezier(.2, .7, .2, 1) both, intro-name-out .5s ease 1.75s forwards; }
+.intro-name span { display: inline-block; }
+.intro-line { width: min(320px, 50vw); height: 2px; margin-top: 28px; background: rgb(18 17 13 / .14); overflow: hidden; animation: intro-fade .6s ease .3s both, intro-name-out .4s ease 1.75s forwards; }
+.intro-line i { display: block; height: 100%; background: #ff8200; transform-origin: left; }
+.intro-meta { position: absolute; left: clamp(20px, 4vw, 48px); right: clamp(20px, 4vw, 48px); bottom: clamp(20px, 4vh, 40px); display: flex; justify-content: space-between; gap: 16px; font-size: .78rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; animation: intro-fade .6s ease .2s both, intro-name-out .4s ease 1.75s forwards; }
+.intro-count { font-variant-numeric: tabular-nums; color: #ff8200; }
+@keyframes intro-name { 0% { opacity: 0; filter: blur(18px); letter-spacing: .08em; transform: translateY(24px) scale(1.04); } 70% { opacity: 1; filter: blur(0); } 100% { opacity: 1; filter: blur(0); letter-spacing: -.05em; transform: none; } }
+@keyframes intro-name-out { to { opacity: 0; transform: translateY(-14px); } }
+@keyframes intro-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes intro-screen-out { to { opacity: 0; visibility: hidden; } }
+.page.is-intro { animation: intro-open 3.6s both; transform-origin: 50% 50vh; }
+@keyframes intro-open {
+  0%, 48% { clip-path: inset(50vh 50vw calc(100% - 50vh) 50vw round 36px); transform: scale(1.12); animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
+  100% { clip-path: inset(0vh 0vw calc(100% - 100vh) 0vw round 0px); transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) { .intro-screen { display: none; } .page.is-intro { animation: none; } }

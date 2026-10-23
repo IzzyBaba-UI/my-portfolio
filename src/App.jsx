@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 // The ribbons are a static site file, so they live in /public with the favicons and the
 // social preview instead of being bundled: swap the PNG on disk and the page picks it up
@@ -142,8 +142,40 @@ function CustomCursor() {
   )
 }
 
+// Opening sequence: a cream screen with the name coming into focus and a 0–100 counter, then the site
+// "opens" as a rounded window that grows from the middle of the screen to fill it. Total run is INTRO_MS;
+// the CSS keyframes in styles.css (.page.is-intro and .intro-screen) are timed to the same number.
+const INTRO_MS = 3600
+function IntroScreen({ onDone }) {
+  const [count, setCount] = useState(0)
+  useEffect(() => {
+    const start = performance.now()
+    let frame = 0
+    const tick = (now) => {
+      const p = Math.min((now - start) / 1700, 1)
+      setCount(Math.round(100 * (1 - Math.pow(1 - p, 3))))
+      if (p < 1) frame = window.requestAnimationFrame(tick)
+    }
+    frame = window.requestAnimationFrame(tick)
+    const done = window.setTimeout(onDone, INTRO_MS)
+    return () => { window.cancelAnimationFrame(frame); window.clearTimeout(done) }
+  }, [onDone])
+  return (
+    <>
+    <div className="intro-bg" aria-hidden="true" />
+    <div className="intro-screen" aria-hidden="true">
+      <div className="intro-name"><span>Omole</span> <span>Israel</span></div>
+      <div className="intro-line"><i style={{ transform: `scaleX(${count / 100})` }} /></div>
+      <div className="intro-meta"><span>Portfolio · 2026</span><span className="intro-count">{String(count).padStart(3, '0')}</span><span>Product &amp; Graphic Designer</span></div>
+    </div>
+    </>
+  )
+}
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const [intro, setIntro] = useState(() => typeof window !== 'undefined' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+  const finishIntro = useCallback(() => setIntro(false), [])
   const [roleIndex, setRoleIndex] = useState(0)
   const [roleLeaving, setRoleLeaving] = useState(false)
   const [audience, setAudience] = useState('For Everyone')
@@ -378,6 +410,15 @@ function App() {
     }
   }, [])
 
+  // Hold the page at the top and still while the opening sequence plays.
+  useEffect(() => {
+    if (!intro) return undefined
+    window.scrollTo(0, 0)
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = previous }
+  }, [intro])
+
   // The case study is a full-screen layer: lock the page behind it and let Escape close it.
   useEffect(() => {
     if (!projectOpen) return undefined
@@ -389,7 +430,9 @@ function App() {
   }, [projectOpen])
 
   return (
-    <div className="page">
+    <>
+    {intro && <IntroScreen onDone={finishIntro} />}
+    <div className={`page${intro ? ' is-intro' : ''}`}>
       <div className="scroll-progress" aria-hidden="true" />
       <div className="aurora aurora-one" /><div className="aurora aurora-two" /><div className="grain" />
       <nav className="nav glass">
@@ -510,6 +553,7 @@ function App() {
 
       <CustomCursor />
     </div>
+    </>
   )
 }
 
